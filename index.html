@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Globe</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="//unpkg.com/three"></script>
+    <script src="//unpkg.com/globe.gl"></script>
+</head>
+<body>
+    <div class="ui-container">
+        <input type="search" id="search-bar" placeholder="Zoekwoord">
+        <div class="filter-buttons">
+            <button id="btn-politiek">Politiek</button>
+            <button id="btn-klimaat">Klimaat</button>
+            <button id="btn-economie">Economie</button>
+            <button id="btn-cultuur">Cultuur</button>
+            <button id="btn-techniek">Techniek</button>
+        </div>
+    </div>
+
+    <div id="globeViz"></div>
+    
+    <div class="notification-count">8 berichten</div>
+
+    <div class="side-menu">
+        <div class="tab-menu">
+            <div class="tab active">Europa</div>
+            <div class="tab">Afrika</div>
+            <div class="dropdown">
+                <button class="dropdown-button">Nieuwste</button>
+            </div>
+        </div>
+        <div class="news-list">
+            <div class="news-item">
+                <div class="category-indicator politiek"></div>
+                <div class="news-content">
+                    <div class="news-title">Paus roept op tot vrijlating journansien nalistradtische ontru mingen van pers</div>
+                    <div class="news-category">Politiek</div>
+                </div>
+                <img class="news-image" src="https://picsum.photos/70/70?random=1" alt="News thumbnail">
+            </div>
+            
+            <div class="news-item">
+                <div class="category-indicator klimaat"></div>
+                <div class="news-content">
+                    <div class="news-title">VN-voedselhulpkon: iedereen in Gaza riskeer hongershood</div>
+                    <div class="news-category">Klimaat</div>
+                </div>
+                <img class="news-image" src="https://picsum.photos/70/70?random=2" alt="News thumbnail">
+            </div>
+            
+            <div class="news-item">
+                <div class="category-indicator economie"></div>
+                <div class="news-content">
+                    <div class="news-title">Postin en Ruslandse consulazt bluiten</div>
+                    <div class="news-category">Economie</div>
+                </div>
+                <img class="news-image" src="https://picsum.photos/70/70?random=3" alt="News thumbnail">
+            </div>
+            
+            <div class="news-item">
+                <div class="category-indicator politiek"></div>
+                <div class="news-content">
+                    <div class="news-title">Duitsland: Asidzekar er Fasser vour opvang van over Oekraine</div>
+                    <div class="news-category">Politiek</div>
+                </div>
+                <img class="news-image" src="https://picsum.photos/70/70?random=4" alt="News thumbnail">
+            </div>
+            
+            <div class="news-item">
+                <div class="category-indicator politiek"></div>
+                <div class="news-content">
+                    <div class="news-title">Duitsland: Asizzekar Faeser vour opvang van over Oekraine</div>
+                    <div class="news-category">Politiek</div>
+                </div>
+                <img class="news-image" src="https://picsum.photos/70/70?random=5" alt="News thumbnail">
+            </div>
+        </div>
+    </div>
+
+    <script>
+      // Globe initialization
+      const globeContainer = document.getElementById('globeViz');
+
+      const myGlobe = Globe()
+        (globeContainer)
+        // Custom styled globe
+        .globeImageUrl('') // No image, will use custom styling
+        .backgroundColor('rgba(0,0,0,0)') 
+        .showGraticules(false)
+        .showAtmosphere(false)
+        .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+        // Custom material to create the light gray globe with darker countries
+        .globeMaterial(new THREE.MeshPhongMaterial({
+          color: 'lightgray',
+          emissive: '#222',
+          emissiveIntensity: 0.1,
+          shininess: 0.1,
+        }));
+
+      // Add markers for the colored points on the globe
+      const markers = [
+        { lat: 40.7, lng: -74, size: 0.5, color: 'orange' },
+        { lat: 35.6, lng: 139.7, size: 0.5, color: 'lightblue' },
+        { lat: 41.9, lng: 12.5, size: 0.5, color: 'orange' }, 
+        { lat: 51.5, lng: -0.1, size: 0.5, color: 'orange' },
+        { lat: 48.9, lng: 2.3, size: 0.5, color: 'orange' },
+        { lat: 40.4, lng: -3.7, size: 0.5, color: 'yellow' },
+        { lat: 55.8, lng: 37.6, size: 0.5, color: 'lightblue' }
+      ];
+      
+      myGlobe.pointsData(markers)
+        .pointAltitude(0.01)
+        .pointColor('color')
+        .pointRadius('size');
+
+      // Position the camera
+      myGlobe.pointOfView({ lat: 40, lng: 0, altitude: 2.5 });
+
+      // Enable zoom (set to true)
+      myGlobe.controls().enableZoom = true; 
+      // Enable rotation
+      myGlobe.controls().autoRotate = true;
+      myGlobe.controls().autoRotateSpeed = 0.3;
+
+      // Fit to container
+        const updateDimensions = () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            myGlobe.width(width).height(height);
+        };
+
+      window.addEventListener('resize', updateDimensions);
+      updateDimensions(); // Initial call
+    </script>
+</body>
+</html> 
